@@ -2,20 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Heib12 - محرك البحث العربي</title>
+<title>Heib12</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 body{font-family:'Segoe UI';margin:0;background:#fff;text-align:center;padding-top:50px}
 .logo{font-size:80px;font-weight:bold}.b{color:#1a73e8}.r{color:#ea4335}
-.search{width:92%;max-width:600px;margin:20px auto;border:1px solid #dfe1e5;border-radius:24px;padding:12px 20px;display:flex;box-shadow:0 1px 6px rgba(32,33,36,.1)}
-.search input{flex:1;border:none;outline:none;font-size:17px;background:transparent}
+.search{width:92%;max-width:600px;margin:20px auto;border:1px solid #dfe1e5;border-radius:24px;padding:12px 20px;display:flex}
+.search input{flex:1;border:none;outline:none;font-size:17px}
 .btn{padding:10px 20px;margin:5px;background:#f8f9fa;border:1px solid #f8f9fa;border-radius:4px;cursor:pointer}
 .results{max-width:850px;margin:30px auto;text-align:right;padding:0 15px}
 .card{margin-bottom:20px;padding:15px;border:1px solid #eee;border-radius:8px}
-.card a{font-size:20px;color:#1a0dab;text-decoration:none}.card a:hover{text-decoration:underline}
-.url{color:#006621;font-size:13px}.desc{color:#4d5156;font-size:14px;line-height:1.7}
-.cat{display:inline-block;background:#e8f0fe;color:#1a73e8;padding:3px 10px;border-radius:12px;font-size:12px;margin-bottom:5px}
+.card a{font-size:20px;color:#1a0dab;text-decoration:none;cursor:pointer}
+.card a:hover{text-decoration:underline}
+.url{color:#006621;font-size:13px}.desc{color:#4d5156;font-size:14px}
+.cat{display:inline-block;background:#e8f0fe;color:#1a73e8;padding:3px 10px;border-radius:12px;font-size:12px}
 #page-content{display:none;max-width:850px;margin:30px auto;text-align:right;padding:25px}
-.back{margin-top:20px;display:inline-block;padding:10px 20px;background:#1a73e8;color:#fff;text-decoration:none;border-radius:4px}
+.back{margin-top:20px;display:inline-block;padding:10px 20px;background:#1a73e8;color:#fff;text-decoration:none;border-radius:4px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -23,7 +25,7 @@ body{font-family:'Segoe UI';margin:0;background:#fff;text-align:center;padding-t
 <div id="home">
     <div class="logo"><span class="b">Heib</span><span class="r">12</span></div>
     <form onsubmit="search(event)">
-        <div class="search"><input id="q" placeholder="ابحث في 2000 مقال و 3000 كلمة"></div>
+        <div class="search"><input id="q" placeholder="ابحث في Heib12"></div>
         <button class="btn" type="submit">بحث Heib12</button>
     </form>
     <div id="res" class="results"></div>
@@ -33,15 +35,53 @@ body{font-family:'Segoe UI';margin:0;background:#fff;text-align:center;padding-t
 
 <script>
 let DB = [
-{"c":"صحة","t":"علاج الصداع النصفي بسرعة","u":"/m/1.html","d":"10 طرق طبيعية لعلاج الصداع النصفي والشقيقة في المنزل بدون ادوية","k":"صداع نصفي راس الم علاج طبي دواء شقيقة"},
-{"c":"صحة","t":"فوائد شرب الماء على الريق","u":"/m/2.html","d":"اكتشف 15 فائدة لشرب الماء اول ما تصحى من النوم لانقاص الوزن وتحسين البشرة","k":"ماء صحة جسم ريجيم تخسيس بشرة"},
-{"c":"دين","t":"تفسير سورة البقرة كامل مكتوب","u":"/m/3.html","d":"تفسير مبسط لسورة البقرة مع اسباب النزول وفضل قراءتها يوميا","k":"قران تفسير بقرة دين اسلام سورة"},
-{"c":"دين","t":"مواقيت الصلاة واتجاه القبلة","u":"/m/4.html","d":"تعرف على اوقات الصلاة الخمسة واتجاه القبلة حسب مدينتك","k":"صلاة مواقيت اذان اسلام قبلة"},
-{"c":"برمجة","t":"كورس تعلم بايثون من الصفر للاحتراف","u":"/m/5.html","d":"دورة بايثون كاملة مع 50 مشروع عملي وتطبيقات الذكاء الاصطناعي","k":"برمجة بايثون كود python تعلم ذكاء"},
-{"c":"برمجة","t":"حل 100 خطأ شائع في البرمجة","u":"/m/6.html","d":"اشهر اخطاء الجافاسكربت والبايثون وكيف تصلحها بسرعة","k":"كود خطأ debug برمجة javascript"},
-{"c":"أخبار","t":"اسعار الدولار والذهب اليوم","u":"/m/7.html","d":"متابعة لحظية لاسعار العملات والذهب والبورصة في الوطن العربي","k":"اخبار اقتصاد مال دولار ذهب بورصة"},
-{"c":"أخبار","t":"نتائج مباريات الدوري اليوم","u":"/m/8.html","d":"جميع نتائج الدوري المصري والسعودي والاوروبي لحظة بلحظة","k":"رياضة كرة قدم مباراة هدف دوري"},
-{"c":"تعليم","t":"كيف تذاكر وتحصل على 100%","u":"/m/9.html","d":"7 طرق علمية للمذاكرة السريعة والحفظ بدون نسيان للطلاب","k":"تعليم دراسة مذاكرة
+{"c":"صحة","t":"علاج الصداع في 5 دقايق","u":"1","d":"10 وصفات طبيعية للتخلص من الصداع بدون ادوية. اشرب ماء + كمادات + نعناع","k":"صداع راس الم علاج"},
+{"c":"دين","t":"تفسير سورة الفاتحة","u":"2","d":"تفسير مبسط لسورة الفاتحة مع اسباب النزول وفضلها","k":"قران تفسير دين"},
+{"c":"برمجة","t":"تعلم بايثون من الصفر","u":"3","d":"كورس بايثون كامل للمبتدئين مع مشاريع","k":"برمجة بايثون كود"}
+];
+
+// نولد 1997 مقال
+for(let i=4; i<=2000; i++){
+    DB.push({c:"عام",t:`مقال رقم ${i} عن الصحة والتقنية`,u:`${i}`,d:`هذا وصف للمقال رقم ${i}. معلومات قيمة`,k:"صحة تقنية تعليم اخبار"});
+}
+
+function search(e){
+    e.preventDefault();
+    document.getElementById('page-content').style.display='none';
+    document.getElementById('home').style.display='block';
+    let q = document.getElementById('q').value.toLowerCase().trim();
+    let results = DB.filter(s => s.t.includes(q) || s.k.includes(q) || s.d.includes(q)).slice(0,50);
+    let html = results.length ? `<p style="color:#70757a">حوالي ${results.length} نتيجة</p>` : 'لم نجد نتائج';
+    // اهم حاجة: onclick
+    html += results.map(r=>`<div class="card"><span class="cat">${r.c}</span><div class="url">heib12.com/m/${r.u}.html</div><a onclick="openPage('${r.u}')">${r.t}</a><p class="desc">${r.d}</p></div>`).join('');
+    document.getElementById('res').innerHTML = html;
+}
+
+function openPage(id){
+    document.getElementById('home').style.display='none';
+    let article = DB.find(x => x.u == id);
+    if(article){
+        document.getElementById('page-content').style.display='block';
+        document.getElementById('page-content').innerHTML = `
+        <h1>${article.t}</h1>
+        <p><b>الفئة:</b> ${article.c}</p>
+        <p style="font-size:17px;line-height:2">${article.d}</p>
+        <p><b>كلمات مفتاحية:</b> ${article.k}</p>
+        <hr>
+        <p>هذا هو محتوى المقال رقم ${id}. تقدر تكتب هنا موضوع كامل.</p>
+        <span class="back" onclick="goHome()">الرجوع للبحث</span>
+        `;
+        window.scrollTo(0,0);
+    }
+}
+
+function goHome(){
+    document.getElementById('page-content').style.display='none';
+    document.getElementById('home').style.display='block';
+}
+</script>
+</body>
+</html>
 
 
 
