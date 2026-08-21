@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -12,49 +13,33 @@
         body {
             background-color: #f8f9fa;
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .header {
             text-align: center;
-            margin-top: 25px;
-            margin-bottom: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
         }
         .header h1 {
             color: #1a73e8;
             margin: 0 0 5px 0;
-            font-size: 32px;
+            font-size: 28px;
         }
         .header p {
             color: #5f6368;
             margin: 0;
-            font-size: 14px;
+            font-size: 13px;
         }
-        .search-wrapper {
+        .search-container {
             width: 100%;
             max-width: 700px;
             background: white;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             box-shadow: 0 1px 6px rgba(32,33,36,0.1);
-            border: 1px solid #dfe1e5;
-        }
-        /* تحسين مظهر نتائج محرك البحث */
-        .gsc-control-cse {
-            background-color: transparent !important;
-            border: none !important;
-            padding: 0 !important;
-        }
-        .gsc-search-button-v2 {
-            border-radius: 20px !important;
-            padding: 10px 20px !important;
-            background-color: #1a73e8 !important;
-        }
-        .gsc-input-box {
-            border-radius: 20px !important;
-            border: 1px solid #dfe1e5 !important;
         }
     </style>
 </head>
@@ -62,11 +47,11 @@
 
     <div class="header">
         <h1>Heib12 Search</h1>
-        <p>محرك بحث الويب والأخبار الشامل</p>
+        <p>محرك بحث الويب والأخبار المباشر</p>
     </div>
 
-    <div class="search-wrapper">
-        <!-- أداة البحث المباشر عن كل مواقع الإنترنت والأخبار -->
+    <div class="search-container">
+        <!-- كود محرك بحث جوجل المضمن داخل الصفحة -->
         <script async src="https://cse.google.com/cse.js?cx=partner-pub-5969507963363060:search"></script>
         <div class="gcse-search"></div>
     </div>
