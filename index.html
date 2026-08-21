@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heib12 Search</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f8f9fa; color: #202124; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 25px; }
+        .logo { font-size: 56px; font-weight: 800; color: #1a73e8; letter-spacing: -1px; }
+        .logo span { color: #ea4335; }
+        .tagline { color: #5f6368; font-size: 14px; margin-top: -5px; }
+        .search-area { width: 100%; max-width: 600px; display: flex; background: #fff; border: 1px solid #dfe1e5; border-radius: 30px; padding: 6px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .search-area input { flex: 1; border: none; outline: none; font-size: 16px; padding: 8px; }
+        .search-area button { background: #1a73e8; color: #fff; border: none; border-radius: 20px; padding: 8px 24px; font-size: 15px; font-weight: 600; cursor: pointer; }
+        .search-area button:hover { background: #1557b0; }
+        .results-container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 15px; }
+        .result-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: right; }
+        .result-source { font-size: 12px; color: #202124; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .result-title { font-size: 18px; color: #1a0dab; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 6px; }
+        .result-title:hover { text-decoration: underline; }
+        .result-snippet { font-size: 14px; color: #4d5156; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo">Heib<span>12</span></div>
+        <div class="tagline">محرك البحث السحابي المستقل</div>
+    </div>
+
+    <div class="search-area">
+        <input type="text" id="searchInput" placeholder="ابحث في الويب..." onkeypress="if(event.key==='Enter') runSearch()">
+        <button onclick="runSearch()">بحث</button>
+    </div>
+
+    <div class="results-container" id="results"></div>
+
+    <script>
+        function runSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            const container = document.getElementById('results');
+            if (!query) return;
+
+            container.innerHTML = '<div style="text-align:center; color:#666;">جاري جلب النتائج...</div>';
+
+            const oldScript = document.getElementById('apiCall');
+            if (oldScript) oldScript.remove();
+
+            const script = document.createElement('script');
+            script.id = 'apiCall';
+            script.src = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&callback=showData`;
+            document.body.appendChild(script);
+        }
+
+        function showData(response) {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
+
+            const items = response.query?.search || [];
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:#666;">لم يتم العثور على نتائج.</div>';
+                return;
+            }
+
+            items.forEach(item => {
+                const text = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+                const url = `https://ar.wikipedia.org/wiki/${encodeURIComponent(item.title)}`;
+                
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-source"><span>🌐</span> <span>Heib12 Index</span></div>
+                    <a class="result-title" href="${url}" target="_blank">${item.title}</a>
+                    <div class="result-snippet">${text}...</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+    </script>
+</body>
+</html>
