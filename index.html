@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -13,33 +12,88 @@
         body {
             background-color: #f8f9fa;
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         .header {
             text-align: center;
-            margin-top: 15px;
-            margin-bottom: 15px;
+            margin-top: 20px;
+            margin-bottom: 20px;
         }
         .header h1 {
             color: #1a73e8;
             margin: 0 0 5px 0;
-            font-size: 28px;
+            font-size: 32px;
         }
         .header p {
             color: #5f6368;
             margin: 0;
-            font-size: 13px;
+            font-size: 14px;
         }
-        .search-container {
+        .search-box {
+            display: flex;
             width: 100%;
-            max-width: 700px;
+            max-width: 600px;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 16px;
+            border: 2px solid #dfe4ea;
+            border-radius: 30px;
+            outline: none;
             background: white;
-            padding: 15px;
+        }
+        input[type="text"]:focus {
+            border-color: #1a73e8;
+        }
+        button {
+            padding: 14px 26px;
+            font-size: 16px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .results-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .card {
+            background: white;
+            padding: 18px;
             border-radius: 12px;
-            box-shadow: 0 1px 6px rgba(32,33,36,0.1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+            border: 1px solid #e8eaed;
+        }
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+        .card h3 a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .card h3 a:hover {
+            text-decoration: underline;
+        }
+        .card p {
+            color: #4d5156;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0;
+        }
+        .status-msg {
+            text-align: center;
+            color: #70757a;
+            font-size: 15px;
         }
     </style>
 </head>
@@ -50,14 +104,56 @@
         <p>محرك بحث الويب والأخبار المباشر</p>
     </div>
 
-    <div class="search-container">
-        <!-- كود محرك بحث جوجل المضمن داخل الصفحة -->
-        <script async src="https://cse.google.com/cse.js?cx=partner-pub-5969507963363060:search"></script>
-        <div class="gcse-search"></div>
-    </div>
+    <form class="search-box" onsubmit="performSearch(event)">
+        <input type="text" id="searchInput" placeholder="اكتب للبحث في الويب والأخبار..." required>
+        <button type="submit">بحث</button>
+    </form>
+
+    <div class="results-container" id="results"></div>
+
+    <script>
+        async function performSearch(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            const resultsDiv = document.getElementById('results');
+
+            if (!query) return;
+
+            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث...</p>';
+
+            try {
+                const url = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&origin=*`;
+                const res = await fetch(url);
+                const data = await res.json();
+                const items = data.query.search;
+
+                if (!items || items.length === 0) {
+                    resultsDiv.innerHTML = '<p class="status-msg">لم يتم العثور على نتائج. جرب كلمة بحث أخرى.</p>';
+                    return;
+                }
+
+                let html = '';
+                items.forEach(item => {
+                    const cleanSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+                    const link = `https://ar.wikipedia.org/wiki/${encodeURIComponent(item.title)}`;
+                    html += `
+                        <div class="card">
+                            <h3><a href="${link}" target="_blank">${item.title}</a></h3>
+                            <p>${cleanSnippet}...</p>
+                        </div>
+                    `;
+                });
+
+                resultsDiv.innerHTML = html;
+            } catch (err) {
+                resultsDiv.innerHTML = '<p class="status-msg">حدث خطأ في الاتصال، يرجى المحاولة لاحقاً.</p>';
+            }
+        }
+    </script>
 
 </body>
 </html>
+
 
 
 
