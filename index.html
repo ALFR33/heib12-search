@@ -10,7 +10,7 @@
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
         body {
-            background-color: #f4f6f8;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -19,48 +19,63 @@
         }
         .header {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
             margin-bottom: 20px;
         }
         .header h1 {
-            color: #2c3e50;
+            color: #1a73e8;
             margin: 0 0 5px 0;
+            font-size: 32px;
         }
         .header p {
-            color: #7f8c8d;
+            color: #5f6368;
             margin: 0;
+            font-size: 14px;
         }
         .search-box {
             display: flex;
             width: 100%;
             max-width: 600px;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 8px;
+            margin-bottom: 20px;
         }
         input[type="text"] {
             flex: 1;
             padding: 12px 18px;
             font-size: 16px;
-            border: 2px solid #dfe4ea;
-            border-radius: 25px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
             outline: none;
-            transition: 0.3s;
+            box-shadow: 0 1px 6px rgba(32,33,36,0.1);
         }
         input[type="text"]:focus {
-            border-color: #3498db;
+            border-color: #1a73e8;
         }
         button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #3498db;
+            padding: 12px 22px;
+            font-size: 15px;
+            background-color: #1a73e8;
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 24px;
             cursor: pointer;
-            transition: 0.3s;
+            font-weight: 500;
         }
-        button:hover {
-            background-color: #2980b9;
+        .quick-links {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .quick-links a {
+            background: #fff;
+            border: 1px solid #dadce0;
+            padding: 6px 14px;
+            border-radius: 16px;
+            color: #3c4043;
+            text-decoration: none;
+            font-size: 13px;
         }
         .results-container {
             width: 100%;
@@ -69,39 +84,38 @@
         .card {
             background: white;
             padding: 18px;
-            border-radius: 12px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 8px;
+            border: 1px solid #dfe1e5;
             margin-bottom: 15px;
             line-height: 1.6;
         }
         .card h3 {
-            margin: 0 0 8px 0;
-            color: #2c3e50;
+            margin: 0 0 6px 0;
+            font-size: 17px;
         }
-        .card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin: 10px 0;
+        .card h3 a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+        .card h3 a:hover {
+            text-decoration: underline;
+        }
+        .card .url {
+            color: #202124;
+            font-size: 12px;
+            direction: ltr;
+            text-align: right;
+            margin-bottom: 6px;
         }
         .card p {
-            color: #555;
+            color: #4d5156;
             font-size: 14px;
-            margin: 0 0 10px 0;
-        }
-        .card a {
-            display: inline-block;
-            color: #3498db;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .card a:hover {
-            text-decoration: underline;
+            margin: 0;
         }
         .status-msg {
             text-align: center;
-            color: #7f8c8d;
+            color: #70757a;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -109,13 +123,18 @@
 
     <div class="header">
         <h1>Heib12 Search</h1>
-        <p>محرك بحث سريع ومباشر</p>
+        <p>محرك بحث الويب السريع</p>
     </div>
 
     <form class="search-box" onsubmit="handleSearch(event)">
-        <input type="text" id="searchInput" placeholder="اكتب ما تبحث عنه هنا..." required>
+        <input type="text" id="searchInput" placeholder="ابحث في الويب أو الأخبار..." required>
         <button type="submit">بحث</button>
     </form>
+
+    <div class="quick-links" id="webEngines" style="display:none;">
+        <a id="googleLink" target="_blank">بحث في Google ↗</a>
+        <a id="newsLink" target="_blank">الأخبار المباشرة ↗</a>
+    </div>
 
     <div class="results-container" id="results"></div>
 
@@ -124,49 +143,72 @@
             event.preventDefault();
             const query = document.getElementById('searchInput').value.trim();
             const resultsDiv = document.getElementById('results');
+            const webEngines = document.getElementById('webEngines');
+            const googleLink = document.getElementById('googleLink');
+            const newsLink = document.getElementById('newsLink');
 
             if (!query) return;
 
-            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث...</p>';
+            // تحديث روابط البحث المباشر
+            googleLink.href = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+            newsLink.href = `https://news.google.com/search?q=${encodeURIComponent(query)}`;
+            webEngines.style.display = 'flex';
+
+            resultsDiv.innerHTML = '<p class="status-msg">جاري جلب نتائج الويب...</p>';
 
             try {
-                // البحث في عناوين ومقالات ويكيبيديا
-                const searchUrl = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`;
-                const searchRes = await fetch(searchUrl);
-                const searchData = await searchRes.json();
+                // جلب نتائج الويب والتعريفات الفورية عبر DuckDuckGo API
+                const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&pretty=1&origin=*`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-                const items = searchData.query.search;
-
-                if (!items || items.length === 0) {
-                    resultsDiv.innerHTML = '<p class="status-msg">لم يتم العثور على نتائج. جرب كلمة أخرى.</p>';
-                    return;
-                }
-
-                // عرض أول 5 نتائج ذات صلة
                 let html = '';
-                for (let i = 0; i < Math.min(items.length, 5); i++) {
-                    const title = items[i].title;
-                    const snippet = items[i].snippet.replace(/<\/?[^>]+(>|$)/g, ""); // تنظيف وسوم HTML
-                    const pageUrl = `https://ar.wikipedia.org/wiki/${encodeURIComponent(title)}`;
 
+                // إذا توفر ملخص أو إجابة مباشرة
+                if (data.AbstractText) {
                     html += `
                         <div class="card">
-                            <h3>${title}</h3>
-                            <p>${snippet}...</p>
-                            <a href="${pageUrl}" target="_blank">قراءة المقال كاملاً &larr;</a>
+                            <h3><a href="${data.AbstractURL}" target="_blank">${data.Heading}</a></h3>
+                            <div class="url">${data.AbstractURL}</div>
+                            <p>${data.AbstractText}</p>
                         </div>
                     `;
                 }
 
-                resultsDiv.innerHTML = html;
+                // عرض نتائج الروابط والموضوعات ذات الصلة
+                if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+                    data.RelatedTopics.slice(0, 6).forEach(topic => {
+                        if (topic.Text && topic.FirstURL) {
+                            html += `
+                                <div class="card">
+                                    <h3><a href="${topic.FirstURL}" target="_blank">${topic.Text.split(' - ')[0]}</a></h3>
+                                    <div class="url">${topic.FirstURL}</div>
+                                    <p>${topic.Text}</p>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                if (!html) {
+                    resultsDiv.innerHTML = `
+                        <div class="card" style="text-align:center;">
+                            <p>لا توجد نتائج سريعة مباشرة لهذه الكلمة.</p>
+                            <p style="margin-top:10px;"><a href="https://www.google.com/search?q=${encodeURIComponent(query)}" target="_blank" style="color:#1a73e8; font-weight:bold;">انقر هنا للبحث عن "${query}" على الويب بالكامل &larr;</a></p>
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = html;
+                }
 
             } catch (error) {
-                resultsDiv.innerHTML = '<p class="status-msg">حدث خطأ أثناء جلب النتائج. تأكد من اتصال الإنترنت.</p>';
+                resultsDiv.innerHTML = '<p class="status-msg">تعذر تحميل النتائج الفورية. استخدم روابط البحث المباشر بالأعلى.</p>';
             }
         }
     </script>
 
 </body>
 </html>
+
 
 
