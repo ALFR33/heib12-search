@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heib12 Search</title>
     
-    <!-- كود AdSense الرئيسي -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0EX1ZEPJNV"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-0EX1ZEPJNV');
+    </script>
+
+    <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2244311957196913"
      crossorigin="anonymous"></script>
 
@@ -38,7 +48,7 @@
         <div class="tagline">محرك البحث السحابي المستقل</div>
     </div>
 
-    <!-- مساحة إعلان AdSense المخصصة -->
+    <!-- مساحة الإعلان -->
     <div class="ad-banner">
         <!-- heib122 -->
         <ins class="adsbygoogle"
@@ -64,6 +74,13 @@
             const query = document.getElementById('searchInput').value.trim();
             const container = document.getElementById('results');
             if (!query) return;
+
+            // إرسال الحدث إلى Google Analytics لمعرفة ما يبحث عنه الزائر
+            if (typeof gtag === 'function') {
+                gtag('event', 'search', {
+                    search_term: query
+                });
+            }
 
             container.innerHTML = '<div style="text-align:center; color:#666;">جاري جلب النتائج...</div>';
 
