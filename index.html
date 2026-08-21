@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heib12 Search - المحرك الإسلامي والمعلوماتي الشامل</title>
+    <title>Heib12 Search - المحرك الذكي التلقائي</title>
     <style>
         * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background-color: #f8f9fa; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -28,47 +27,23 @@
 
     <div class="header">
         <h1>Heib12 Search</h1>
-        <p>المحرك الشامل للعلوم الشرعية، المقالات، الفوائد والعلاجات، وأخبار العالم</p>
+        <p>محرك البحث العالمي التلقائي - يغطي ملايين المواضيع والفوائد والعلوم</p>
     </div>
 
     <form class="search-box" onsubmit="performSearch(event)">
-        <input type="text" id="searchInput" placeholder="ابحث عن القرآن، الأحاديث، الأذكار، العلاجات، أو أي موضوع..." required>
+        <input type="text" id="searchInput" placeholder="ابحث عن أي شيء في العالم (قرآن، أخبار، فضاء، علاجات)..." required>
         <button type="submit">بحث</button>
     </form>
 
     <div class="results-container" id="results"></div>
 
     <script>
-        // قاعدة البيانات الشاملة: (العلوم الشرعية، موقع موضوع، الفوائد، العلاجات، والوكالات العالمية)
-        const localDatabase = [
-            // القرآن الكريم والعلوم الشرعية والأذكار
-            { title: "القرآن الكريم (موقع آيات / مصحف المدينة)", url: "https://quran.ksu.edu.sa", keywords: "القرآن الكريم تلاوة تفسير مصحف آيات" },
-            { title: "الدرر السنية (الأحاديث النبوية الصحيحة)", url: "https://www.dorar.net/hadith", keywords: "حديث نبوي صحيح سنة ضعيف بحث الأحاديث الشريفة" },
-            { title: "حصن المسلم (الأذكار والأدعية)", url: "https://www.hisnmuslim.com", keywords: "أذكار الصباح المساء حصن المسلم أدعية حصن حصين" },
-            { title: "موقع الإسلام سؤال وجواب", url: "https://islamqa.info", keywords: "فتاوى أحكام شرعية إسلام سؤال وجواب ديني" },
-            { title: "رئاسة شؤون الحرمين الشريفين", url: "https://gph.gov.sa", keywords: "الحرم المكي الحرم النبوي بث مباشر إمام" },
-
-            // موقع موضوع والمقالات العامة الشاملة
-            { title: "موسوعة موقع موضوع (جميع المقالات)", url: "https://mawdoo3.com", keywords: "موضوع مقالات معلومات عامة صحة طب تسبيح تفسير" },
-            { title: "موقع ويكيبيديا الموسوعة الحرة", url: "https://ar.wikipedia.org", keywords: "معلومات عامة تاريخ ثقافي معرفة ويكيبيديا" },
-
-            // الفوائد، الأعشاب، والعلاجات الطبية الطبيعية
-            { title: "موسوعة الأعشاب والطب البديل (موضوع)", url: "https://mawdoo3.com/تصفح/الأعشاب_والطب_البديل", keywords: "علاجات طبيعية أعشاب طب بديل فوائد صحية عشبة" },
-            { title: "فوائد التغذية والأغذية الشافية", url: "https://mawdoo3.com/فوائد_الأغذية_والعلاجات", keywords: "فوائد صحية علاج الأمراض طب نبوي وعلاجات منزلية" },
-            { title: "موقع الطبي (استشارات وعلاجات طبية)", url: "https://www.altibbi.com", keywords: "أطباء صحة علاج أمراض استشارات طبية" },
-
-            // الوكالات والصحف العالمية الكبرى (متعددة اللغات)
-            { title: "الجزيرة نت", url: "https://www.aljazeera.net", keywords: "أخبار سياسة تقارير الجزيرة مباشر" },
-            { title: "BBC News (English)", url: "https://www.bbc.com/news", keywords: "أخبار إنجليزية عاجلة بريطانيا world news" },
-            { title: "RT (روسيا اليوم)", url: "https://russian.rt.com", keywords: "أخبار روسيا سياسة عاجل" },
-            { title: "وكالة الأناضول (تركيا)", url: "https://www.aa.com.tr", keywords: "تركيا أخبار عاجلة وكالة الأناضول" },
-            { title: "فرانس 24 (France 24)", url: "https://www.france24.com/fr", keywords: "فرنسا أوروبا أخبار عالمية" },
-
-            // شبكات التواصل الاجتماعي الكبرى
-            { title: "يوتيوب (YouTube)", url: "https://www.youtube.com", keywords: "فيديوهات ترفيه تعليم مقاطع يوتيوب" },
-            { title: "فيسبوك (Facebook)", url: "https://www.facebook.com", keywords: "تواصل اجتماعي أصدقاء منشورات فيس بوك" },
-            { title: "تيك توك (TikTok)", url: "https://www.tiktok.com", keywords: "فيديوهات قصيرة ترندات تيك توك" },
-            { title: "منصة إكس (Twitter سابقاً)", url: "https://twitter.com", keywords: "تواصل اجتماعي تغريدات أخبار إكس" }
+        // 1. القائمة التوجيهية الخاصة بك (لتوجيه الزائر للفوائد والعلوم الشرعية أولاً)
+        const priorityDatabase = [
+            { title: "القرآن الكريم (موقع آيات)", url: "https://quran.ksu.edu.sa", keywords: "القرآن الكريم تلاوة تفسير مصحف آيات" },
+            { title: "الدرر السنية (الأحاديث النبوية الصحيحة)", url: "https://www.dorar.net/hadith", keywords: "حديث نبوي صحيح سنة ضعيف الأحاديث" },
+            { title: "حصن المسلم (الأذكار والأدعية)", url: "https://www.hisnmuslim.com", keywords: "أذكار الصباح المساء حصن المسلم أدعية" },
+            { title: "موسوعة الأعشاب والطب البديل والعلاجات", url: "https://mawdoo3.com/تصفح/الأعشاب_والطب_البديل", keywords: "علاجات طبيعية أعشاب طب بديل فوائد صحية عشبة" }
         ];
 
         async function performSearch(event) {
@@ -77,31 +52,29 @@
             const resultsDiv = document.getElementById('results');
             if (!query) return;
 
-            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث في المصادر الشرعية والعالمية...</p>';
+            resultsDiv.innerHTML = '<p class="status-msg">جاري الفهرسة وجلب النتائج التلقائية...</p>';
 
             let html = '';
-            let foundMatch = false;
+            let resultsCount = 0;
 
-            // 1. البحث في القاعدة المحلية الشاملة
-            const matches = localDatabase.filter(item => 
+            // أوداً: فحص القائمة التوجيهية الخاصة بك لعرضها في المقدمة
+            const matches = priorityDatabase.filter(item => 
                 item.title.toLowerCase().includes(query.toLowerCase()) || 
                 item.keywords.toLowerCase().includes(query.toLowerCase())
             );
 
-            if (matches.length > 0) {
-                foundMatch = true;
-                matches.forEach(item => {
-                    html += `
-                        <div class="card">
-                            <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
-                            <p><strong>التصنيف والكلمات:</strong> ${item.keywords}</p>
-                            <p style="color:#006621; font-size:12px; margin-top:5px; direction: ltr; text-align: right;">${item.url}</p>
-                        </div>
-                    `;
-                });
-            }
+            matches.forEach(item => {
+                resultsCount++;
+                html += `
+                    <div class="card" style="border-right-color: #28a745;">
+                        <h3><a href="${item.url}" target="_blank">${item.title} ⭐ (موصى به)</a></h3>
+                        <p><strong>التصنيف:</strong> ${item.keywords}</p>
+                        <p style="color:#006621; font-size:12px; margin-top:5px; direction: ltr; text-align: right;">${item.url}</p>
+                    </div>
+                `;
+            });
 
-            // 2. البحث الحي الشامل في الويب لضمان شمولية النتائج لأي استعلام إضافي
+            // ثانياً: جلب النتائج التلقائية الشاملة من الويب عبر الـ API (لتوليد آلاف النتائج فوراً)
             try {
                 const apiURL = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`;
                 const response = await fetch(apiURL);
@@ -109,8 +82,8 @@
                 const items = data.query.search;
 
                 if (items && items.length > 0) {
-                    foundMatch = true;
                     items.forEach(item => {
+                        resultsCount++;
                         const cleanSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
                         const link = `https://ar.wikipedia.org/wiki/${encodeURIComponent(item.title)}`;
                         html += `
@@ -123,10 +96,10 @@
                     });
                 }
             } catch (err) {
-                // تجاوز الخطأ في حال انقطاع الشبكة
+                // تجاهل خطأ الاتصال المؤقت
             }
 
-            if (!foundMatch) {
+            if (resultsCount === 0) {
                 resultsDiv.innerHTML = '<p class="status-msg">لم يتم العثور على نتائج مطابقة لبحثك.</p>';
             } else {
                 resultsDiv.innerHTML = html;
@@ -135,6 +108,7 @@
     </script>
 </body>
 </html>
+
 
 
 
