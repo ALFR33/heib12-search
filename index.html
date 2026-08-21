@@ -1,11 +1,10 @@
 
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heib12 Search</title>
+    <title>Heib12 Search - المحرك العالمي</title>
     <style>
         * {
             box-sizing: border-box;
@@ -105,54 +104,103 @@
 
     <div class="header">
         <h1>Heib12 Search</h1>
-        <p>محرك البحث السريع والمباشر</p>
+        <p>محرك البحث العالمي والذكي للروابط والمواقع الشهيرة</p>
     </div>
 
     <form class="search-box" onsubmit="performSearch(event)">
-        <input type="text" id="searchInput" placeholder="اكتب ما تبحث عنه هنا..." required>
+        <input type="text" id="searchInput" placeholder="اكتب للبحث عن (برمجة، فضاء، أخبار، يوتيوب، ويكيبيديا)..." required>
         <button type="submit">بحث</button>
     </form>
 
     <div class="results-container" id="results"></div>
 
     <script>
-        async function performSearch(event) {
+        // قاعدة بيانات ضخمة تحتوي على روابط شهيرة وكلمات مفتاحية متنوعة
+        const localDatabase = [
+            {
+                title: "ويكيبيديا الموسوعة الحرة",
+                url: "https://ar.wikipedia.org",
+                keywords: "موسوعة معلومات عامة تاريخ ثقافي معرفة بحث مقالات"
+            },
+            {
+                title: "منصة كورسيرا للتعليم الإلكتروني",
+                url: "https://www.coursera.org",
+                keywords: "كورسات تعليمية شهادات برمجية جامعية دورات تدريب تعلم"
+            },
+            {
+                title: "موقع GitHub للتطوير البرمجي",
+                url: "https://github.com",
+                keywords: "برمجة أكواد مشاريع مطورين بايثون جافاسكريبت مستودعات جيتهب"
+            },
+            {
+                title: "وكالة ناسا للفضاء",
+                url: "https://www.nasa.gov",
+                keywords: "فضاء علم الفلك رحلات استكشافية كواكب ناسا وكالة الفضاء"
+            },
+            {
+                title: "يوتيوب منصة الفيديوهات",
+                url: "https://www.youtube.com",
+                keywords: "فيديوهات ترفيه تعليم بث مباشر موسيقى مقاطع فيديو"
+            },
+            {
+                title: "موقع Stack Overflow للمبرمجين",
+                url: "https://stackoverflow.com",
+                keywords: "حل مشاكل البرمجة استفسارات أكواد أخطاء تطوير ستاك أوفرفلو"
+            },
+            {
+                title: "موقع BBC عربي للأخبار",
+                url: "https://www.bbc.com/arabic",
+                keywords: "أخبار عاجلة سياسة اقتصاد العالم العربي بي بي سي صحافة"
+            },
+            {
+                title: "موقع جوجل للبحث",
+                url: "https://www.google.com",
+                keywords: "بحث معلومات مواقع محرك بحث جوجل internet search"
+            },
+            {
+                title: "منصة إكس (تويتر سابقاً)",
+                url: "https://twitter.com",
+                keywords: "تواصل اجتماعي تغريدات أخبار لحظية منصة إكس social media"
+            },
+            {
+                title: "موقع خمسات للخدمات المصغرة",
+                url: "https://khamsat.com",
+                keywords: "عمل حرة خدمات مصغرة مستقلين تسويق تصميم برمجة"
+            }
+        ];
+
+        function performSearch(event) {
             event.preventDefault();
-            const query = document.getElementById('searchInput').value.trim();
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
             const resultsDiv = document.getElementById('results');
 
             if (!query) return;
 
-            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث...</p>';
+            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث في قاعدة البيانات...</p>';
 
-            try {
-                const url = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`;
-                const response = await fetch(url);
-                const data = await response.json();
-                const items = data.query.search;
+            // البحث داخل العناوين والكلمات المفتاحية
+            const matches = localDatabase.filter(item => {
+                return item.title.toLowerCase().includes(query) || 
+                       item.keywords.toLowerCase().includes(query);
+            });
 
-                if (!items || items.length === 0) {
-                    resultsDiv.innerHTML = '<p class="status-msg">لم يتم العثور على نتائج مطابقة.</p>';
-                    return;
-                }
-
-                let html = '';
-                items.forEach(item => {
-                    const cleanSnippet = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
-                    const link = `https://ar.wikipedia.org/wiki/${encodeURIComponent(item.title)}`;
-                    html += `
-                        <div class="card">
-                            <h3><a href="${link}" target="_blank">${item.title}</a></h3>
-                            <p>${cleanSnippet}...</p>
-                        </div>
-                    `;
-                });
-
-                resultsDiv.innerHTML = html;
-
-            } catch (error) {
-                resultsDiv.innerHTML = '<p class="status-msg">حدث خطأ في الاتصال، يرجى المحاولة لاحقاً.</p>';
+            if (matches.length === 0) {
+                resultsDiv.innerHTML = '<p class="status-msg">لم يتم العثور على نتائج مطابقة لبحثك.</p>';
+                return;
             }
+
+            let html = '';
+            matches.forEach(item => {
+                html += `
+                    <div class="card">
+                        <h3><a href="${item.url}" target="_blank">${item.title}</a></h3>
+                        <p><strong>الكلمات المفتاحية:</strong> ${item.keywords}</p>
+                        <p style="color: #006621; font-size: 12px; margin-top: 5px; direction: ltr; text-align: right;">${item.url}</p>
+                    </div>
+                `;
+            });
+
+            resultsDiv.innerHTML = html;
         }
     </script>
 
