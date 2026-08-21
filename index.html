@@ -1,116 +1,109 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heib12 Search - المحرك العالمي الشامل</title>
+    <title>Heib12 Search</title>
+    
+    <!-- كود AdSense الرئيسي -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2244311957196913"
+     crossorigin="anonymous"></script>
+
     <style>
-        * { box-sizing: border-box; font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        body { background-color: #f8f9fa; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header { text-align: center; margin-top: 30px; margin-bottom: 20px; }
-        .header h1 { color: #1a73e8; margin: 0 0 5px 0; font-size: 32px; font-weight: bold; }
-        .header p { color: #5f6368; margin: 0; font-size: 14px; }
-        .search-box { display: flex; width: 100%; max-width: 600px; gap: 10px; margin-bottom: 25px; }
-        input[type="text"] { flex: 1; padding: 14px 20px; font-size: 16px; border: 2px solid #dfe1e5; border-radius: 25px; outline: none; background: #fff; box-shadow: 0 1px 6px rgba(32,33,36,0.1); }
-        input[type="text"]:focus { border-color: #1a73e8; }
-        button { padding: 14px 24px; font-size: 16px; background-color: #1a73e8; color: white; border: none; border-radius: 25px; cursor: pointer; font-weight: bold; }
-        .results-container { width: 100%; max-width: 600px; }
-        .card { background: white; padding: 18px; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #dfe1e5; border-right: 4px solid #1a73e8; }
-        .card h3 { margin: 0 0 8px 0; font-size: 18px; }
-        .card h3 a { color: #1a0dab; text-decoration: none; }
-        .card h3 a:hover { text-decoration: underline; }
-        .card p { color: #4d5156; font-size: 14px; line-height: 1.6; margin: 0; }
-        .status-msg { text-align: center; color: #70757a; font-size: 15px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f8f9fa; color: #202124; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 30px 15px; }
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 52px; font-weight: 800; color: #1a73e8; letter-spacing: -1px; }
+        .logo span { color: #ea4335; }
+        .tagline { color: #5f6368; font-size: 14px; margin-top: -5px; }
+        .search-area { width: 100%; max-width: 650px; display: flex; background: #fff; border: 1px solid #dfe1e5; border-radius: 30px; padding: 6px 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 25px; }
+        .search-area input { flex: 1; border: none; outline: none; font-size: 16px; padding: 8px; }
+        .search-area button { background: #1a73e8; color: #fff; border: none; border-radius: 20px; padding: 8px 24px; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .search-area button:hover { background: #1557b0; }
+        
+        .ad-banner { width: 100%; max-width: 650px; text-align: center; margin: 15px 0; min-height: 90px; background: transparent; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        .results-container { width: 100%; max-width: 650px; display: flex; flex-direction: column; gap: 15px; }
+        .result-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: right; }
+        .result-source { font-size: 12px; color: #202124; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .result-title { font-size: 18px; color: #1a0dab; text-decoration: none; font-weight: 600; display: inline-block; margin-bottom: 6px; }
+        .result-title:hover { text-decoration: underline; }
+        .result-snippet { font-size: 14px; color: #4d5156; line-height: 1.5; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>Heib12 Search</h1>
-        <p>محرك البحث العالمي المستقل - ابحث في كل مصادر الإنترنت والعلوم</p>
+        <div class="logo">Heib<span>12</span></div>
+        <div class="tagline">محرك البحث السحابي المستقل</div>
     </div>
 
-    <form class="search-box" onsubmit="performSearch(event)">
-        <input type="text" id="searchInput" placeholder="ابحث عن أي شيء (أخبار، برمجة، رياضة، علوم)..." required>
-        <button type="submit">بحث</button>
-    </form>
+    <!-- مساحة إعلان AdSense المخصصة -->
+    <div class="ad-banner">
+        <!-- heib122 -->
+        <ins class="adsbygoogle"
+             style="display:block; width:100%;"
+             data-ad-client="ca-pub-2244311957196913"
+             data-ad-slot="3751500138"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <div class="search-area">
+        <input type="text" id="searchInput" placeholder="ابحث في الويب..." onkeypress="if(event.key==='Enter') runSearch()">
+        <button onclick="runSearch()">بحث</button>
+    </div>
 
     <div class="results-container" id="results"></div>
 
     <script>
-        // القاعدة الأساسية الموجهة (لتثبيت أهم المواقع والعلوم الشرعية والفوائد في المقدمة)
-        const coreDatabase = [
-            { title: "القرآن الكريم (موقع آيات)", url: "https://quran.ksu.edu.sa", keywords: "القرآن الكريم تلاوة تفسير مصحف آيات سور" },
-            { title: "الدرر السنية (الأحاديث النبوية الصحيحة)", url: "https://www.dorar.net/hadith", keywords: "حديث نبوي صحيح سنة ضعيف بحث الأحاديث الشريفة" },
-            { title: "حصن المسلم (الأذكار والأدعية)", url: "https://www.hisnmuslim.com", keywords: "أذكار الصباح المساء حصن المسلم أدعية حصن حصين" },
-            { title: "موسوعة الأعشاب والطب البديل (موضوع)", url: "https://mawdoo3.com/تصفح/الأعشاب_والطب_البديل", keywords: "علاجات طبيعية أعشاب طب بديل فوائد صحية عشبة شفاء" },
-            { title: "الجزيرة نت (الأخبار والتقارير)", url: "https://www.aljazeera.net", keywords: "أخبار سياسة تقارير عاجل الجزيرة مباشر" },
-            { title: "موقع GitHub للتطوير البرمجي", url: "https://github.com", keywords: "برمجة أكواد مشاريع مطورين بايثون جافاسكريبت" }
-        ];
-
-        async function performSearch(event) {
-            event.preventDefault();
+        function runSearch() {
             const query = document.getElementById('searchInput').value.trim();
-            const resultsDiv = document.getElementById('results');
+            const container = document.getElementById('results');
             if (!query) return;
 
-            resultsDiv.innerHTML = '<p class="status-msg">جاري البحث الشامل في قواعد البيانات والشبكة...</p>';
+            container.innerHTML = '<div style="text-align:center; color:#666;">جاري جلب النتائج...</div>';
 
-            let html = '';
-            let resultsCount = 0;
-            const lowerQuery = query.toLowerCase();
+            const oldScript = document.getElementById('apiCall');
+            if (oldScript) oldScript.remove();
 
-            // 1. البحث المباشر في القاعدة الأساسية
-            const matches = coreDatabase.filter(item => 
-                item.title.toLowerCase().includes(lowerQuery) || 
-                item.keywords.toLowerCase().includes(lowerQuery)
-            );
+            const script = document.createElement('script');
+            script.id = 'apiCall';
+            script.src = `https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&utf8=&format=json&callback=showData`;
+            document.body.appendChild(script);
+        }
 
-            matches.forEach(item => {
-                resultsCount++;
-                html += `
-                    <div class="card" style="border-right-color: #28a745;">
-                        <h3><a href="${item.url}" target="_blank">${item.title} ⭐ (مصدر موثوق)</a></h3>
-                        <p><strong>التصنيف:</strong> ${item.keywords}</p>
-                        <p style="color:#006621; font-size:12px; margin-top:5px; direction: ltr; text-align: right;">${item.url}</p>
-                    </div>
-                `;
-            });
+        function showData(response) {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
 
-            // 2. توسيع البحث ليشمل نتائج الويب المفتوحة والمتنوعة عبر محركات البحث الموجهة
-            try {
-                // استخدام بوابة البحث المفتوحة لجلب نتائج حقيقية متنوعة
-                const searchAPI = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
-                // بما أن المتصفح يمنع جلب صفحات خارجية مباشرة بسبب الحماية (CORS)، سنعتمد على دمج محرك بحث مباشر يوجه المستخدم بأناقة أو مصادر بديلة
-            } catch (e) {
-                // تجاوز الخطأ
+            const items = response.query?.search || [];
+            if (items.length === 0) {
+                container.innerHTML = '<div style="text-align:center; color:#666;">لم يتم العثور على نتائج.</div>';
+                return;
             }
 
-            // لضمان حصول الباحث على نتائج غنية في حال لم تطابق القاعدة الأساسية، نفتح روابط مباشرة لأشهر المنصات بناءً على كلمة البحث
-            if (resultsCount === 0 || true) {
-                // إضافة روابط توجيهية ذكية للبحث المباشر في جوجل ويوتيوب وغوغل نيوز بناءً على ما كتبه المستخدم
-                const encodedQ = encodeURIComponent(query);
+            items.forEach(item => {
+                const text = item.snippet.replace(/<\/?[^>]+(>|$)/g, "");
+                const url = `https://ar.wikipedia.org/wiki/${encodeURIComponent(item.title)}`;
                 
-                html += `
-                    <div class="card">
-                        <h3><a href="https://www.google.com/search?q=${encodedQ}" target="_blank">بحث شامل في Google عن: ${query}</a></h3>
-                        <p>انقر هنا لعرض كافة نتائج البحث المباشرة والشاملة من جميع أنحاء الإنترنت.</p>
-                        <p style="color:#006621; font-size:12px; margin-top:5px; direction: ltr; text-align: right;">google.com/search?q=${encodedQ}</p>
-                    </div>
-                    <div class="card">
-                        <h3><a href="https://www.youtube.com/results?search_query=${encodedQ}" target="_blank">بحث في فيديوهات YouTube عن: ${query}</a></h3>
-                        <p>استعرض المقاطع والفيديوهات التعليمية والإخبارية المرتبطة ببحثك.</p>
-                        <p style="color:#006621; font-size:12px; margin-top:5px; direction: ltr; text-align: right;">youtube.com</p>
-                    </div>
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                    <div class="result-source"><span>🌐</span> <span>Heib12 Index</span></div>
+                    <a class="result-title" href="${url}" target="_blank">${item.title}</a>
+                    <div class="result-snippet">${text}...</div>
                 `;
-            }
-
-            resultsDiv.innerHTML = html;
+                container.appendChild(card);
+            });
         }
     </script>
 </body>
 </html>
+
 
 
 
