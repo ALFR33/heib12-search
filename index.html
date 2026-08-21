@@ -2,135 +2,119 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heib12 Search</title>
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
         body {
-            background-color: #f4f6f8;
+            background-color: #f8f9fa;
             margin: 0;
             padding: 20px;
-            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .header {
             text-align: center;
-        }
-        h1 {
-            color: #1a73e8;
-            margin-top: 30px;
-            margin-bottom: 5px;
-        }
-        p.sub {
-            color: #666;
+            margin-top: 40px;
             margin-bottom: 25px;
-            font-size: 14px;
         }
-        .search-area {
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        #searchInput {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 15px;
-            font-size: 18px;
-            border: 2px solid #1a73e8;
-            border-radius: 10px;
-            outline: none;
-            background: #ffffff;
-            color: #000000;
-            display: block;
-            margin-bottom: 12px;
-        }
-        #searchBtn {
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            background-color: #1a73e8;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-        #results {
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto 0 auto;
-            text-align: right;
-        }
-        .result-item {
-            background: #ffffff;
-            padding: 15px;
-            margin-bottom: 12px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-        .result-item h3 {
-            margin: 0 0 8px 0;
-            font-size: 16px;
-        }
-        .result-item a {
+        .header h1 {
             color: #1a73e8;
-            text-decoration: none;
+            margin: 0 0 8px 0;
+            font-size: 36px;
+            font-weight: bold;
         }
-        .result-item p {
+        .header p {
+            color: #5f6368;
             margin: 0;
-            color: #444;
-            font-size: 14px;
-            line-height: 1.5;
+            font-size: 15px;
+        }
+        .search-box {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 550px;
+            gap: 12px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 22px;
+            font-size: 17px;
+            border: 2px solid #dfe1e5;
+            border-radius: 30px;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(32,33,36,0.08);
+            transition: 0.3s;
+        }
+        input[type="text"]:focus {
+            border-color: #1a73e8;
+        }
+        .buttons-group {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        button {
+            flex: 1;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-web {
+            background-color: #1a73e8;
+        }
+        .btn-web:hover {
+            background-color: #1557b0;
+        }
+        .btn-news {
+            background-color: #ea4335;
+        }
+        .btn-news:hover {
+            background-color: #d93025;
         }
     </style>
 </head>
 <body>
 
-    <h1>Heib12 Search</h1>
-    <p class="sub">محرك بحث سريع ومباشر</p>
-
-    <div class="search-area">
-        <input type="text" id="searchInput" placeholder="المس هنا واكتب ما تريد...">
-        <button id="searchBtn" onclick="startSearch()">بحث</button>
+    <div class="header">
+        <h1>Heib12 Search</h1>
+        <p>ابحث في الويب والأخبار مباشرة</p>
     </div>
 
-    <div id="results"></div>
+    <form class="search-box" onsubmit="searchWeb(event)">
+        <input type="text" id="searchInput" placeholder="اكتب ما تبحث عنه هنا..." required>
+        <div class="buttons-group">
+            <button type="submit" class="btn-web">بحث في الويب 🌐</button>
+            <button type="button" class="btn-news" onclick="searchNews()">الأخبار العاجلة 📰</button>
+        </div>
+    </form>
 
     <script>
-        function startSearch() {
-            var inputVal = document.getElementById("searchInput").value.trim();
-            var resultsBox = document.getElementById("results");
-
-            if (inputVal === "") {
-                alert("يرجى كتابة كلمة أولاً");
-                return;
+        function searchWeb(e) {
+            if (e) e.preventDefault();
+            const q = document.getElementById('searchInput').value.trim();
+            if (q) {
+                window.location.href = 'https://www.google.com/search?q=' + encodeURIComponent(q);
             }
+        }
 
-            resultsBox.innerHTML = "<p style='text-align:center;'>جاري البحث...</p>";
-
-            var requestUrl = "https://ar.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + encodeURIComponent(inputVal) + "&format=json&origin=*";
-
-            fetch(requestUrl)
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    var items = data.query.search;
-                    if (!items || items.length === 0) {
-                        resultsBox.innerHTML = "<p style='text-align:center;'>لا توجد نتائج.</p>";
-                        return;
-                    }
-
-                    var htmlContent = "";
-                    for (var i = 0; i < items.length; i++) {
-                        var title = items[i].title;
-                        var snippet = items[i].snippet.replace(/<\/?[^>]+(>|$)/g, "");
-                        var link = "https://ar.wikipedia.org/wiki/" + encodeURIComponent(title);
-
-                        htmlContent += "<div class='result-item'>" +
-                            "<h3><a href='" + link + "' target='_blank'>" + title + "</a></h3>" +
-                            "<p>" + snippet + "...</p>" +
-                            "</div>";
-                    }
-                    resultsBox.innerHTML = htmlContent;
-                })
-                .catch(function(err) {
-                    resultsBox.innerHTML = "<p style='text-align:center;'>حدث خطأ، تحقق من الإنترنت.</p>";
-                });
+        function searchNews() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (q) {
+                window.location.href = 'https://news.google.com/search?q=' + encodeURIComponent(q);
+            } else {
+                window.location.href = 'https://news.google.com/';
+            }
         }
     </script>
 
